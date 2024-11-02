@@ -31,4 +31,5 @@ module.exports = {
   devServer: {
     static: './dist',
   },
+  mode: 'development',
 };

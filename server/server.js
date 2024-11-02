@@ -5,6 +5,7 @@ import App from "../src/App";
 import livereload from 'livereload';
 import connectLiveReload from 'connect-livereload';
 import path from "path";
+import fs from 'fs';
 
 const app = express();
 
@@ -21,10 +22,22 @@ liveReloadServer.server.once("connection", () => {
 
 
 app.get("/", async (req, res) => {
-  const response = await fetch("https://fakestoreapi.com/products");
-  const products = await response.json();
-  const html = ReactDOMServer.renderToString(<App list={products} />);
-  res.send(`<!doctype html>${html}`);
+  try {
+    const response = await fetch("https://fakestoreapi.com/products");
+    const products = await response.json();
+    const html = ReactDOMServer.renderToString(<App list={products} />);
+    fs.readFile(path.join(__dirname, '../src/index.html'), "utf8", (err, data) => {
+      if (err) {
+        throw new Error("Internal Server Error");
+      }
+      
+      return res.send(data.replace('<div id="root"></div>', `<div id="root">${html}</div>`).replace("<title>Template Title</title>", "<title>Products - FakeStore</title>"));
+    });
+  }
+  catch(err)
+  {
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.listen(3002, () => {

@@ -2,23 +2,23 @@ import express from "express";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import App from "../src/App";
-import livereload from 'livereload';
-import connectLiveReload from 'connect-livereload';
+// import livereload from 'livereload';
+// import connectLiveReload from 'connect-livereload';
 import path from "path";
 import fs from 'fs';
 
 const app = express();
 
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, '../'));
+// const liveReloadServer = livereload.createServer();
+// liveReloadServer.watch(path.join(__dirname, '../'));
 
-app.use(connectLiveReload());
+// app.use(connectLiveReload());
 
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
+// liveReloadServer.server.once("connection", () => {
+//   setTimeout(() => {
+//     liveReloadServer.refresh("/");
+//   }, 100);
+// });
 
 
 app.get("/", async (req, res) => {
@@ -31,7 +31,7 @@ app.get("/", async (req, res) => {
         throw new Error("Internal Server Error");
       }
       
-      return res.send(data.replace('<div id="root"></div>', `<div id="root">${html}</div>`).replace("<title>Template Title</title>", "<title>Products - FakeStore</title>"));
+      return res.send(data.replace('<div id="root"></div>', `<div id="root">${html}</div>`).replace("<title>Template Title</title>", "<meta name=\"description\" content=\"Fakestore's Products]\"><title>Products - FakeStore</title>"));
     });
   }
   catch(err)
